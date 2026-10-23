@@ -10,13 +10,18 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import jobRole from '../assets/jobRole.json'
+import jobSkills from '../assets/jobSkills.json'
+import summaries from '../assets/summaries.json'
 
 
 
 const steps = ['Basic information', 'Contact Details', 'Educational Details', 'Review & Submit'];
 
-function ResumeInput() {
+function ResumeInput({resumeDetails,setResumeDetails}) {
+
+   console.log(resumeDetails);
+
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -33,17 +38,23 @@ function ResumeInput() {
         <div>
           <h3>Personal Details</h3>
           <div className='row p-3'>
-            <TextField id="standard-basic-fullname" label="Ful name" variant="standard" />
-            <TextField id="standard-basic-loc" label="Location" variant="standard" />
+            <TextField value={resumeDetails.fullname} onChange={e=>setResumeDetails({...resumeDetails,fullname:e.target.value})}  id="standard-basic-fullname" label="Ful name" variant="standard" />
+            <TextField value={resumeDetails.location} onChange={e=>setResumeDetails({...resumeDetails,location:e.target.value})} id="standard-basic-loc" label="Location" variant="standard" />
             <FormControl variant='standard'>
         <InputLabel id="demo-simple-select-label">Choose Job Title</InputLabel>
-        <Select
+        <Select defaultValue={""} onChange={e=>setResumeDetails({...resumeDetails,job:e.target.value})} 
           labelId="demo-simple-select-label"
           id="demo-simple-select"
          label="Job"
          
         >
-          <MenuItem value={"job"}>Job</MenuItem>
+          {
+            jobRole.jobRoles.map(job=>(
+              <MenuItem key={job} value={job}>{job}</MenuItem>
+            ))
+          }
+
+          
          
         </Select>
       </FormControl>
@@ -57,10 +68,10 @@ function ResumeInput() {
         <div>
           <h3>Contact Details</h3>
            <div className='row p-3'>
-            <TextField id="standard-basic-email" label="Email" variant="standard"/>
-            <TextField id="standard-basic-contact" label="Contact Number" variant="standard"/>
-           <TextField id="standard-basic-linkedin" label="Linkedln Link" variant="standard"/>
-            <TextField id="standard-basic-github" label="Github Link" variant="standard"/>
+            <TextField value={resumeDetails.email} onChange={e=>setResumeDetails({...resumeDetails,email:e.target.value})} id="standard-basic-email" label="Email" variant="standard"/>
+            <TextField value={resumeDetails.phone} onChange={e=>setResumeDetails({...resumeDetails,phone:e.target.value})} id="standard-basic-contact" label="Contact Number" variant="standard"/>
+           <TextField value={resumeDetails.linkedin} onChange={e=>setResumeDetails({...resumeDetails,linkedin:e.target.value})} id="standard-basic-linkedin" label="Linkedln Link" variant="standard"/>
+            <TextField value={resumeDetails.github} onChange={e=>setResumeDetails({...resumeDetails,github:e.target.value})} id="standard-basic-github" label="Github Link" variant="standard"/>
 
             </div>
         </div>
@@ -71,9 +82,9 @@ function ResumeInput() {
         <div>
           <h3>Educational Details</h3>
            <div className='row p-3'>
-            <TextField id="standard-basic-degree" label="Bachelor's Degree" variant="standard"/>
-            <TextField id="standard-basic-college" label="University/College Name" variant="standard"/>
-            <TextField id="standard-basic-year" label="Year of graduation" variant="standard"/>
+            <TextField value={resumeDetails.degree} onChange={e=>setResumeDetails({...resumeDetails,degree:e.target.value})} id="standard-basic-degree" label="Bachelor's Degree" variant="standard"/>
+            <TextField value={resumeDetails.college} onChange={e=>setResumeDetails({...resumeDetails,college:e.target.value})} id="standard-basic-college" label="University/College Name" variant="standard"/>
+            <TextField value={resumeDetails.year} onChange={e=>setResumeDetails({...resumeDetails,year:e.target.value})} id="standard-basic-year" label="Year of graduation" variant="standard"/>
           </div>
         </div>
       )
@@ -90,7 +101,10 @@ function ResumeInput() {
         break;
     }
   }
-
+ const generateSkillSummary=()=>{
+  setResumeDetails({...resumeDetails,skills:jobSkills[resumeDetails.job],summary:summaries[resumeDetails.job]})
+  handleNext()
+ }
 return (
     <Box sx={{ width: '100%' }}>
       <Stepper activeStep={activeStep}>
@@ -140,7 +154,7 @@ return (
            
            
               {activeStep === steps.length - 1 ? 
-              <Button>GENERATE AI SKILLS & SUMMARY</Button>
+              <Button onClick={generateSkillSummary}>GENERATE AI SKILLS & SUMMARY</Button>
               : <Button onClick={handleNext}>NEXT</Button>}
            
           </Box>
