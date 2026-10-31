@@ -18,7 +18,7 @@ function Preview({resumeDetails}) {
       {/*duplicate according to skill number*/}
       {
         resumeDetails?.skills?.map(skill=>(
-          <span> <Button key={skill} variant='text' className='bg-dark text-light rounded my-2 mx-2'>{skill} Skills</Button></span>
+          <span key={skill} > <Button  variant='text' className='bg-dark text-light rounded my-2 mx-2'>{skill} Skills</Button></span>
         ))
       }
       <Divider className='bg-dark mt-3'/>
